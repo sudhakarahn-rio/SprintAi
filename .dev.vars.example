@@ -1,0 +1,3 @@
+# Copy to `.dev.vars` (not committed) for Wrangler / Cloudflare local dev.
+NEXTJS_ENV=development
+SESSION_SECRET=

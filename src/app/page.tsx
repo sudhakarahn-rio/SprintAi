@@ -1,51 +1,90 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ClipboardListIcon, SparklesIcon, UsersIcon } from "lucide-react";
 
-export default function Home() {
+import { Button } from "@/components/ui/button";
+import { getCurrentUserId } from "@/lib/auth/session";
+
+export default async function Home() {
+	const userId = await getCurrentUserId();
+
 	return (
-		<div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-			<main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-				<Image className="dark:invert" src="/next.svg" alt="Next.js logo" width={180} height={38} priority />
-				<ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-					<li className="mb-2 tracking-[-.01em]">
-						Get started by editing{" "}
-						<code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-							src/app/page.tsx
-						</code>
-						.
-					</li>
-					<li className="tracking-[-.01em]">Save and see your changes instantly.</li>
-				</ol>
-
-				<div className="flex gap-4 items-center flex-col sm:flex-row">
-					<a
-						className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-						href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Read our docs
-					</a>
+		<div className="flex min-h-screen flex-col bg-gradient-to-b from-muted/40 to-background font-sans">
+			<header className="border-b border-border/80 bg-background/80 backdrop-blur">
+				<div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+					<span className="font-semibold text-lg tracking-tight">QuizMaker</span>
+					<nav className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+						{userId ? (
+							<Button asChild size="sm" variant="default">
+								<Link href="/mcqs">Multiple choice questions</Link>
+							</Button>
+						) : null}
+						<Button asChild size="sm" variant={userId ? "ghost" : "default"}>
+							<Link href="/login">Log in</Link>
+						</Button>
+						{!userId ? (
+							<Button asChild size="sm" variant="outline">
+								<Link href="/signup">Sign up</Link>
+							</Button>
+						) : null}
+					</nav>
 				</div>
+			</header>
+
+			<main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-16 sm:px-6 sm:py-24">
+				<div className="mx-auto max-w-2xl text-center">
+					<p className="text-primary text-sm font-medium tracking-wide uppercase">For educators</p>
+					<h1 className="mt-3 font-heading text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+						Build and share multiple choice questions
+					</h1>
+					<p className="mt-4 text-lg text-muted-foreground leading-relaxed text-pretty">
+						QuizMaker helps teachers create MCQs, preview them like students would, and track attempts—
+						with a path to align content with standards in future updates.
+					</p>
+					<div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+						{userId ? (
+							<Button asChild className="h-11 px-8 text-base" size="lg">
+								<Link href="/mcqs">Open your MCQs</Link>
+							</Button>
+						) : (
+							<>
+								<Button asChild className="h-11 px-8 text-base" size="lg">
+									<Link href="/signup">Create an account</Link>
+								</Button>
+								<Button asChild className="h-11 px-8 text-base" size="lg" variant="outline">
+									<Link href="/login">I already have an account</Link>
+								</Button>
+							</>
+						)}
+					</div>
+				</div>
+
+				<ul className="mx-auto mt-20 grid max-w-3xl gap-6 sm:grid-cols-3">
+					<li className="rounded-xl border bg-card p-6 text-card-foreground shadow-sm ring-1 ring-foreground/5">
+						<ClipboardListIcon aria-hidden className="mb-3 size-8 text-primary" />
+						<h2 className="font-heading font-semibold">List &amp; manage</h2>
+						<p className="mt-2 text-muted-foreground text-sm leading-relaxed">
+							See all your MCQs in one table—create, edit, or remove questions anytime.
+						</p>
+					</li>
+					<li className="rounded-xl border bg-card p-6 text-card-foreground shadow-sm ring-1 ring-foreground/5">
+						<UsersIcon aria-hidden className="mb-3 size-8 text-primary" />
+						<h2 className="font-heading font-semibold">Preview &amp; attempts</h2>
+						<p className="mt-2 text-muted-foreground text-sm leading-relaxed">
+							Learners answer in preview mode; every attempt is stored with a timestamp.
+						</p>
+					</li>
+					<li className="rounded-xl border bg-card p-6 text-card-foreground shadow-sm ring-1 ring-foreground/5">
+						<SparklesIcon aria-hidden className="mb-3 size-8 text-primary" />
+						<h2 className="font-heading font-semibold">Room to grow</h2>
+						<p className="mt-2 text-muted-foreground text-sm leading-relaxed">
+							Built for adding AI-assisted standards alignment and richer quizzes later.
+						</p>
+					</li>
+				</ul>
 			</main>
-			<footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image aria-hidden src="/file.svg" alt="File icon" width={16} height={16} />
-					Learn
-				</a>
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image aria-hidden src="/globe.svg" alt="Globe icon" width={16} height={16} />
-					Go to nextjs.org →
-				</a>
+
+			<footer className="border-t py-8 text-center text-muted-foreground text-sm">
+				<p>© {new Date().getFullYear()} QuizMaker</p>
 			</footer>
 		</div>
 	);
