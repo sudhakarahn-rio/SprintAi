@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { LogoutButton } from "@/components/logout-button";
 import { requireUserId } from "@/lib/auth/require-user";
 
 export default async function McqsLayout({ children }: { children: React.ReactNode }) {
@@ -11,13 +12,14 @@ export default async function McqsLayout({ children }: { children: React.ReactNo
 					<Link className="font-semibold tracking-tight" href="/">
 						QuizMaker
 					</Link>
-					<nav className="flex items-center gap-4 text-sm">
-						<Link className="text-muted-foreground hover:text-foreground" href="/mcqs">
+					<nav className="flex items-center gap-2 text-sm">
+						<Link className="px-2 py-1 text-muted-foreground hover:text-foreground" href="/mcqs">
 							MCQs
 						</Link>
-						<Link className="text-muted-foreground hover:text-foreground" href="/">
+						<Link className="px-2 py-1 text-muted-foreground hover:text-foreground" href="/">
 							Home
 						</Link>
+						<LogoutButton />
 					</nav>
 				</div>
 			</header>
