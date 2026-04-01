@@ -1,10 +1,20 @@
 import Link from "next/link";
 
-import { LogoutButton } from "@/components/logout-button";
+import { ProfileMenu } from "@/components/profile-menu";
+import { getDatabase } from "@/lib/auth/get-database";
 import { requireUserId } from "@/lib/auth/require-user";
+import { executeQueryFirst } from "@/lib/d1-client";
 
 export default async function McqsLayout({ children }: { children: React.ReactNode }) {
-	await requireUserId();
+	const userId = await requireUserId();
+
+	const db = await getDatabase();
+	const user = await executeQueryFirst<{ username: string }>(
+		db,
+		`SELECT username FROM users WHERE id = ?`,
+		userId,
+	);
+
 	return (
 		<div className="min-h-screen bg-muted/20">
 			<header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -19,7 +29,7 @@ export default async function McqsLayout({ children }: { children: React.ReactNo
 						<Link className="px-2 py-1 text-muted-foreground hover:text-foreground" href="/">
 							Home
 						</Link>
-						<LogoutButton />
+						{user && <ProfileMenu user={{ username: user.username }} />}
 					</nav>
 				</div>
 			</header>
